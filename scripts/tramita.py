@@ -42,7 +42,7 @@ def processa_arquivo(arquivo, callback):
         for dados in arquivo_raw.readlines()[2:]:
             if dados.strip():
                 try:
-                    getattr(projetos[identificador(dados)], callback, dados)
+                    getattr(projetos[identificador(dados)], callback)(dados)
                 except KeyError:
                     print(dados)
 
