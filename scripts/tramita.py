@@ -98,6 +98,20 @@ class PL(object):
         })
 
 
+def local_save(projetos):
+    with open(FINAL+'legis.json', 'w') as output:
+        json.dump(
+            [projeto.__dict__ for projeto in projetos.values()],
+            output, indent=4)
+
+def mongo_save(projetos):
+    from pymongo import MongoClient
+    client = MongoClient()
+    db = client.monitorlegislativo
+    legis = db.legis
+    for p in projetos:
+        legis.insert(projetos[p].__dict__)
+
 if '__main__' == __name__:
     print('Processando projetos.')
     with io.open(RAW+'projetos.txt', 'r',
@@ -115,8 +129,3 @@ if '__main__' == __name__:
 
     print('Processando tramitações.')
     processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
-
-    with open(FINAL+'legis.json', 'w') as output:
-        json.dump(
-            {projeto.id: projeto.__dict__ for projeto in projetos.values()},
-            output, indent=4)
