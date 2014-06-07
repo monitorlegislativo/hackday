@@ -87,6 +87,7 @@ class PL(object):
         nome, extensao = nome_de_arquivo.split('.')
         self.url_pdf = self.url_base + "{nome}.{ext}".format(
             nome=nome.upper(), ext=extensao)
+        self.url_pdf = self.url_pdf.strip()
 
     def dados_tramitacoes(self, dados):
         __, __, __, tramitacao, inicio, fim = dados.split('#')
