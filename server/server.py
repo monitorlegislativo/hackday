@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from tools import jsonify, datefromunix
 from flask.ext.pymongo import PyMongo
-from flask.ext.moment import Moment
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'monitorlegislativo'
@@ -9,7 +8,6 @@ app.config['MONGO_DBNAME'] = 'monitorlegislativo'
 app.jinja_env.filters['datefromunix'] = datefromunix
 
 mongo = PyMongo(app)
-moment = Moment(app)
 
 @app.route("/")
 def index():

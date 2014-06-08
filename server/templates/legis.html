@@ -100,7 +100,7 @@ body {
 						<div class="card">
 							{{tramite.tramitacao}}
 							{% if tramite.data_fim %}
-							{{moment(tramite.data_fim|datefromunix).fromTime(tramite.data_inicio|datefromunix)}}
+							{{tramite.data_fim}}
 							{% endif %}
 						</div>
 					{% endfor %}
