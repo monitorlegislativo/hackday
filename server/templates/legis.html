@@ -47,14 +47,14 @@
       		<div class="col-md-11 main">
       			<div class="row">
       				<div class="col-md-5">
+      				{% set last = p.tramitacoes|reverse|first %}
+      				{% set first = p.tramitacoes|first %}
 						<div class="status card">
-							{% if p.encerramento %}
-							{{p.encerramento}}
-							{% else %}
-							{% for last in p.tramitacoes[-1:] %}
-								{{last.tramitacao}}
-							{% endfor %}
-							{% endif %}
+								{% if p.encerramento %}
+									{{p.encerramento}}
+								{% else %}						
+									{{last.tramitacao}}
+								{% endif %}
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -63,9 +63,11 @@
 							<p>{{p.ementa}}</p>
 						</div>
 						<div class="tempo">
-							{% for first in p.tramitacoes[:1] %}
-							Tempo total decorrido: <span>{{first.data_inicio|diasatras()}} dias dias</span>
-							{% endfor %}
+							{% if p.encerramento %}
+							Tempo total decorrido: <span>{{first.data_inicio|diasatras(last.data_inicio)}} dias</span>
+							{% else %}
+							Tempo total decorrido: <span>{{first.data_inicio|diasatras()}} dias</span>
+							{% endif %}
 						</div>
 					</div>
 				</div>
