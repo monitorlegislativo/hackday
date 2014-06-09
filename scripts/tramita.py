@@ -128,9 +128,9 @@ def mongo_save(projetos, clear=False):
     from pymongo import MongoClient
     client = MongoClient()
     db = client.monitorlegislativo
-    if (clear):
-        db.legis.clear()
     legis = db.legis
+    if (clear):
+        legis.clear()
     for p in projetos:
         legis.update({'_id' : projetos[p]._id}, projetos[p].__dict__, upsert=True)
 
