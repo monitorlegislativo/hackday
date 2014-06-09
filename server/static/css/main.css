@@ -1,0 +1,49 @@
+body {
+	background-color: #e5e5e5;
+	font-family: Roboto, Verdana;
+}
+
+
+/* Frontpage - front.html */
+
+#frontpage {
+	text-align: center;
+}
+
+#frontpage .logo {
+	width:368px;
+	height:283px;
+	background-image: url('/static/imgs/logo.png');
+	margin-top:75px;
+	margin-left:100px;
+}
+
+#frontpage .busca {
+	width:80%;
+}
+
+
+/* Legis - legis.html */
+
+#legis .sidebar-left {
+	background-color: #ccc;
+}
+
+#legis .main {
+	background-color: #FFF;
+}
+
+#legis .tramitacao {
+	width:800px;
+}
+#legis .card {
+	width:175px;
+	height:175px;
+	border:5px solid #000;
+	margin:15px;
+}
+
+#legis .tramitacao .card {
+	float:left;
+
+}
