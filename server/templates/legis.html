@@ -30,13 +30,23 @@
 
       			<div class="autores">
       			<h2>Autores</h2>
-      			<span class="principal">{{p.autores|first}}</span>
+      			<ul>
+      			<li class="principal">{{p.autores|first}}</li>
       			{% for autor in p.autores[1:] %}
-      			<span>{{autor}}</span>
+      			<li>{{autor}}</li>
       			{% endfor %}
+      			</ul>
       			</div>
       			<div class="anexos">
       			<h2>Anexos</h2>
+      			</div>
+      			<div class="assuntos">
+      			<h2>Assuntos</h2>
+      			<ul>
+      			{% for assunto in p.assuntos %}
+      			<li>{{assunto}}</li>
+      			{% endfor %}
+      			</ul>
       			</div>
       		</div>
       		<div class="col-md-10 main">
