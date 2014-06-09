@@ -93,3 +93,10 @@ h2 {
 #legis .tramitacao .card {
 	float:left;
 }
+
+#legis .explicacao .explica {
+	display:none;
+}
+#legis .explicacao .explica:first-child {
+	display:block;
+}

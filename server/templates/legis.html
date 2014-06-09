@@ -84,20 +84,25 @@
 						<div class="tramitacao">
 							<h2>Tramitação</h2>
 							{% for tramite in p.tramitacoes %}
-								<div class="card">
+								<a href="#T-{{tramite.tramitacao}}" data-tramitacao={{tramite.tramitacao}}><div class="card {{tramite.tramitacao}}">
 									{{tramite.tramitacao}}<br/>
 									{% if tramite.data_fim %}
 									{{tramite.data_inicio|diasatras(tramite.data_fim)}} dias
 									{% else %}
 									{{tramite.data_inicio|diasatras}} dias
 									{% endif %}
-								</div>
+								</div></a>
 							{% endfor %}
 						</div>
 					</div>
 					<div class="col-md-4">
+						<div class="explicacao">
 						<div class="explica">
 						Clique em uma etapa para entender mais.
+						</div>
+						<div class="explica" id="T-SGP22">
+						A Equipe de Controle do Processo Legislativo é parte integrante das Secretarias de Apoio ao Legislativo e é aqui que se da o inicio no processo de tramitação de Projeto de Lei dentro da casa legislativa quando protocola, indexa e autua as proposituras, dando-lhes o devido encaminhamento . Após esta fase primordial onde um texto vira Projeto de Lei (PL),  deve acompanhar e registrar todas as etapas de andamento das proposituras, cuidando para que observem-se os prazos legais.
+						</div>
 						</div>
 					</div>	
 			</div>
