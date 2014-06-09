@@ -69,12 +69,13 @@
 						<div class="ementa">
 							<h2>Ementa</h2>
 							<p>{{p.ementa}}</p>
+              <a href="{{p.url_pdf}}" target="_blank">Integra do Projeto</a>
 						</div>
 						<div class="tempo">
 							{% if p.encerramento %}
-							Tempo total decorrido: <span>{{first.data_inicio|diasatras(last.data_inicio)}} dias</span>
+							Tempo total decorrido: <span>{{p.data_apresentacao|diasatras(p.data_encerramento)}} dias</span>
 							{% else %}
-							Tempo total decorrido: <span>{{first.data_inicio|diasatras()}} dias</span>
+							Tempo total decorrido: <span>{{p.data_apresentacao|diasatras()}} dias</span>
 							{% endif %}
 						</div>
 					</div>
@@ -104,6 +105,12 @@
 						<b>SGP22 - Equipe de Controle do Processo Legislativo</b>
 						<p>A Equipe de Controle do Processo Legislativo é parte integrante das Secretarias de Apoio ao Legislativo e é aqui que se da o inicio no processo de tramitação de Projeto de Lei dentro da casa legislativa quando protocola, indexa e autua as proposituras, dando-lhes o devido encaminhamento . Após esta fase primordial onde um texto vira Projeto de Lei (PL),  deve acompanhar e registrar todas as etapas de andamento das proposituras, cuidando para que observem-se os prazos legais.</p>
 						</div>
+            {% for e in explicacoes %}
+            <div class="explica" id="T-{{e.sigla}}">
+            <b>{{e.sigla}} - {{e.nome}}</b>
+            <p>{{e.descricao}}</p>
+            </div>
+            {% endfor %}
 						</div>
 					</div>	
 			</div>

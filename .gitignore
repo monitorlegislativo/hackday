@@ -1,4 +1,4 @@
 *.pyc
-data/*
+data/*.json
 raw/*
 tmp

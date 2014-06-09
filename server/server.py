@@ -9,6 +9,7 @@ app.jinja_env.filters['diasatras'] = diasatras
 
 mongo = PyMongo(app)
 
+
 @app.route("/")
 def index():
 	return render_template('front.html')
@@ -28,14 +29,15 @@ def busca():
 @app.route('/legis/<tipo>/<numero>/<ano>')
 @app.route('/legis/<tipo>/<numero>/<ano>/<json>')
 def projeto(tipo, numero, ano, json=False):
-	pid = tipo + '-' + numero + '-' + ano
+	pid = tipo.lower() + '-' + numero + '-' + ano
 	projeto = mongo.db.legis.find_one({"_id": pid})
+	explicacoes = mongo.db.explicacoes.find()
 	if not projeto:
 		abort(404)
 	if json == 'json':
 		return jsonify(projeto)
 	elif json == False:
-		return render_template('legis.html', p=projeto)
+		return render_template('legis.html', p=projeto, explicacoes=explicacoes)
 
 if __name__ == "__main__":
 	app.run(debug=True)
