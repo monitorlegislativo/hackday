@@ -52,6 +52,20 @@ body {
     vertical-align:middle;
 }
 
+#legis .ementa {
+	height:200px;
+}
+
+#legis .tempo {
+	width:100%;
+	background-color: #e6e6e6;
+	padding:10px;
+	font-weight: bold;
+}
+
+#legis .tempo span {
+	float:right;
+}
 #legis .status.card {
 	background-color: #c03226;
 	width:280px;
