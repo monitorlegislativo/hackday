@@ -71,12 +71,14 @@ class PL(object):
         try:
             data = datetime.fromtimestamp(
                 self.data_apresentacao).strftime('%Y')
+
         except TypeError:
             data = self.data_apresentacao  # data_br has returned a string
             self.error = True
 
         self._id = "{tipo}-{numero}-{data}".format(
             tipo=self.tipo, numero=self.numero, data=data)
+        self.ano = data
 
     def dados_encerramentos(self, dados):
         '''Agrega os dados dos encerramentos'''
