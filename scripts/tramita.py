@@ -66,6 +66,7 @@ class PL(object):
         self.tramitacoes = []
         self.comissoes = []
         self.assuntos = []
+        self.autores = [] # Talvez seja o caso de ja normalizar e achar um id unico aqui
 
         try:
             data = datetime.fromtimestamp(
@@ -74,7 +75,7 @@ class PL(object):
             data = self.data_apresentacao  # data_br has returned a string
             self.error = True
 
-        self.id = "{tipo}-{numero}-{data}".format(
+        self._id = "{tipo}-{numero}-{data}".format(
             tipo=self.tipo, numero=self.numero, data=data)
 
     def dados_encerramentos(self, dados):
@@ -110,6 +111,12 @@ class PL(object):
         __, __, __, assunto = dados.split('#')
         self.assuntos.append(assunto.strip())
 
+    def dados_autores(self, dados):
+        '''Agrega os dados dos assuntos legislativos'''
+        __, __, __, autor = dados.split('#')
+        self.autores.append(autor.strip())
+
+
 
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
@@ -117,34 +124,39 @@ def local_save(projetos):
             [projeto.__dict__ for projeto in projetos.values()],
             output, indent=4)
 
-def mongo_save(projetos):
+def mongo_save(projetos, clear=False):
     from pymongo import MongoClient
     client = MongoClient()
     db = client.monitorlegislativo
+    if (clear):
+        db.legis.clear()
     legis = db.legis
     for p in projetos:
-        legis.insert(projetos[p].__dict__)
+        legis.update({'_id' : projetos[p]._id}, projetos[p].__dict__, upsert=True)
 
 if '__main__' == __name__:
     print('Processando projetos.')
     with io.open(RAW+'projetos.txt', 'r',
                  encoding='iso-8859-1', newline='\r\n') as projetos_raw:
-        projetos = {pl.id: pl for pl in
+        projetos = {pl._id: pl for pl in
                     (PL(dados) for dados in projetos_raw.readlines()[2:]
                      if dados.strip())
-                    if pl.id is not None}
+                    if pl._id is not None}
 
     print('Processando encerramentos.')
-    #processa_arquivo(RAW+'encerra.txt', 'dados_encerramentos')
+    processa_arquivo(RAW+'encerra.txt', 'dados_encerramentos')
 
     print('Processando arquivos brutos.')
-    #processa_arquivo(RAW+'prolegt.txt', 'dados_arquivos_brutos')
+    processa_arquivo(RAW+'prolegt.txt', 'dados_arquivos_brutos')
 
     print('Processando tramitações.')
-    #processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
+    processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
 
     print('Processando comissões.')
-    #processa_arquivo(RAW+'comdes.txt', 'dados_comissoes')
+    processa_arquivo(RAW+'comdes.txt', 'dados_comissoes')
 
     print('Processando assuntos.')
     processa_arquivo(RAW+'assunto.txt', 'dados_assuntos')
+
+    print('Processando autores.')
+    processa_arquivo(RAW+'autor.txt', 'dados_assuntos')
