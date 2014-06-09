@@ -45,33 +45,42 @@
       			</div>
       		</div>
       		<div class="col-md-11 middle">
-				<div class="ementa">
-					<h2>Ementa</h2>
-					<p>{{p.ementa}}</p>
-				</div>
-
-				<div class="status">
-					<h2>Status do projeto</h2>
-					<div class="card">
-						{% if p.encerramento %}
-						{{p.encerramento}}
-						{% else %}
-						{p.tramitacoes|reverse|first.tramitacao}
-						{% endif %}
-					</div>
-				</div>
-
-				<div class="tramitacao">
-					<h2>Tramitação</h2>
-					{% for tramite in p.tramitacoes %}
-						<div class="card">
-							{{tramite.tramitacao}}
-							{% if tramite.data_fim %}
-							{{tramite.data_fim}}
+      			<div class="row">
+      				<div class="col-md-5">
+						<div class="status card">
+							{% if p.encerramento %}
+							{{p.encerramento}}
+							{% else %}
+							{p.tramitacoes|reverse|first.tramitacao}
 							{% endif %}
 						</div>
-					{% endfor %}
+					</div>
+					<div class="col-md-6">
+						<div class="ementa">
+							<h2>Ementa</h2>
+							<p>{{p.ementa}}</p>
+						</div>
+					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="tramitacao">
+							<h2>Tramitação</h2>
+							{% for tramite in p.tramitacoes %}
+								<div class="card">
+									{{tramite.tramitacao}}
+									{% if tramite.data_fim %}
+									{{tramite.data_fim}}
+									{% endif %}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="explica">
+						Clique em uma etapa para entender mais.
+						</div>
+					</div>	
 			</div>
 	</div>
 </body>
