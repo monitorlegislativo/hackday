@@ -130,7 +130,7 @@ def mongo_save(projetos, clear=False):
     db = client.monitorlegislativo
     legis = db.legis
     if (clear):
-        legis.clear()
+        legis.drop()
     for p in projetos:
         legis.update({'_id' : projetos[p]._id}, projetos[p].__dict__, upsert=True)
 
@@ -159,4 +159,4 @@ if '__main__' == __name__:
     processa_arquivo(RAW+'assunto.txt', 'dados_assuntos')
 
     print('Processando autores.')
-    processa_arquivo(RAW+'autor.txt', 'dados_assuntos')
+    processa_arquivo(RAW+'autor.txt', 'dados_autores')
