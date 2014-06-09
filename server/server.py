@@ -29,7 +29,7 @@ def busca():
 @app.route('/legis/<tipo>/<numero>/<ano>/<json>')
 def projeto(tipo, numero, ano, json=False):
 	pid = tipo + '-' + numero + '-' + ano
-	projeto = mongo.db.legis.find_one({"id": pid})
+	projeto = mongo.db.legis.find_one({"_id": pid})
 	if not projeto:
 		abort(404)
 	if json == 'json':
