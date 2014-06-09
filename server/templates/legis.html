@@ -31,22 +31,25 @@
 
     <div class="container">
       	<div class="row">
-      		<div class="col-md-1 sidebar-left">
+      		<div class="col-md-2 sidebar-left">
       			<div class="info">
-      			<h2>{{p.tipo}}</h2>
-      			<h2>{{p.numero}}</h2>
+      			<h2>{{p.tipo|upper}} - {{p.numero}}/{{p.ano}}</h2>
       			</div>
 
       			<div class="autores">
       			<h2>Autores</h2>
+      			<span class="principal">{{p.autores|first}}</span>
+      			{% for autor in p.autores[1:] %}
+      			<span>{{autor}}</span>
+      			{% endfor %}
       			</div>
       			<div class="anexos">
       			<h2>Anexos</h2>
       			</div>
       		</div>
-      		<div class="col-md-11 main">
+      		<div class="col-md-10 main">
       			<div class="row">
-      				<div class="col-md-5">
+      				<div class="col-md-4">
       				{% set last = p.tramitacoes|reverse|first %}
       				{% set first = p.tramitacoes|first %}
 						<div class="status card">
@@ -87,7 +90,7 @@
 							{% endfor %}
 						</div>
 					</div>
-					<div class="col-md-5">
+					<div class="col-md-4">
 						<div class="explica">
 						Clique em uma etapa para entender mais.
 						</div>

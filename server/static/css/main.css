@@ -7,6 +7,11 @@ a:hover {
 	text-decoration: none;
 }
 
+h2 {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
 /* Frontpage - front.html */
 
 #frontpage {
