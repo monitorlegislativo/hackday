@@ -68,6 +68,10 @@ h2 {
     vertical-align:middle;
 }
 
+#legis .tramitacao a {
+	color:#7f7f7f;
+}
+
 #legis .ementa {
 	height:200px;
 }
@@ -83,15 +87,23 @@ h2 {
 	float:rightt s;
 }
 #legis .status.card {
-	background-color: #c03226;
 	width:280px;
 	height:280px;
 	color:#FFF;
 	font-weight: bold;
-	
+	background-color: #c03226;
 }
 #legis .tramitacao .card {
 	float:left;
+	background-color: #e6e6e6;
+}
+
+#legis .explicacao {
+	color:#FFF;
+	background-color: #546473;
+	width:100%;
+	padding:15px;
+	text-align: justify;
 }
 
 #legis .explicacao .explica {
