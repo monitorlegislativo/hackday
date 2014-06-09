@@ -27,10 +27,13 @@ body {
 
 #legis .sidebar-left {
 	background-color: #ccc;
+	border-top:1px solid #000;
+	border-bottom: 1px solid #000;
 }
 
 #legis .main {
 	background-color: #FFF;
+	border:1px solid #000;	
 }
 
 #legis .tramitacao {
