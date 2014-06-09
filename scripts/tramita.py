@@ -64,6 +64,8 @@ class PL(object):
         self.data_apresentacao = data_br(data)
         self.error = False
         self.tramitacoes = []
+        self.comissoes = []
+        self.assuntos = []
 
         try:
             data = datetime.fromtimestamp(
@@ -90,12 +92,23 @@ class PL(object):
         self.url_pdf = self.url_pdf.strip()
 
     def dados_tramitacoes(self, dados):
+        '''Agrega os dados das tramitações'''
         __, __, __, tramitacao, inicio, fim = dados.split('#')
         self.tramitacoes.append({
             'tramitacao': tramitacao.strip().upper(),
             'data_inicio': data_br(inicio.strip()),
             'data_fim': data_br(fim.strip())
         })
+
+    def dados_comissoes(self, dados):
+        '''Agrega os dados das comissões designadas'''
+        __, __, __, comissao = dados.split('#')
+        self.comissoes.append(comissao.split('-')[1].strip())
+
+    def dados_assuntos(self, dados):
+        '''Agrega os dados dos assuntos legislativos'''
+        __, __, __, assunto = dados.split('#')
+        self.assuntos.append(assunto.strip())
 
 
 def local_save(projetos):
@@ -122,10 +135,16 @@ if '__main__' == __name__:
                     if pl.id is not None}
 
     print('Processando encerramentos.')
-    processa_arquivo(RAW+'encerra.txt', 'dados_encerramentos')
+    #processa_arquivo(RAW+'encerra.txt', 'dados_encerramentos')
 
     print('Processando arquivos brutos.')
-    processa_arquivo(RAW+'prolegt.txt', 'dados_arquivos_brutos')
+    #processa_arquivo(RAW+'prolegt.txt', 'dados_arquivos_brutos')
 
     print('Processando tramitações.')
-    processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
+    #processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
+
+    print('Processando comissões.')
+    #processa_arquivo(RAW+'comdes.txt', 'dados_comissoes')
+
+    print('Processando assuntos.')
+    processa_arquivo(RAW+'assunto.txt', 'dados_assuntos')
