@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
-from tools import jsonify, datefromunix
+from tools import jsonify, diasatras
 from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'monitorlegislativo'
 #app.config["SECRET_KEY"] = "KeepThisS3cr3t"
-app.jinja_env.filters['datefromunix'] = datefromunix
+app.jinja_env.filters['diasatras'] = diasatras
 
 mongo = PyMongo(app)
 

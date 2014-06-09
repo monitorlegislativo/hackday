@@ -63,7 +63,9 @@
 							<p>{{p.ementa}}</p>
 						</div>
 						<div class="tempo">
-							Tempo total decorrido: <span>NNN dias</span>
+							{% for first in p.tramitacoes[:1] %}
+							Tempo total decorrido: <span>{{first.data_inicio|diasatras()}} dias dias</span>
+							{% endfor %}
 						</div>
 					</div>
 				</div>
@@ -73,9 +75,11 @@
 							<h2>Tramitação</h2>
 							{% for tramite in p.tramitacoes %}
 								<div class="card">
-									{{tramite.tramitacao}}
+									{{tramite.tramitacao}}<br/>
 									{% if tramite.data_fim %}
-									{{tramite.data_fim}}
+									{{tramite.data_inicio|diasatras(tramite.data_fim)}} dias
+									{% else %}
+									{{tramite.data_inicio|diasatras}} dias
 									{% endif %}
 								</div>
 							{% endfor %}

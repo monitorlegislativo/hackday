@@ -22,5 +22,10 @@ def jsonify(*args, **kwargs):
     """
     return Response(json.dumps(dict(*args, **kwargs), cls=MongoJsonEncoder), mimetype='application/json')
 
-def datefromunix(value):
-    return datetime.datetime.fromtimestamp(value)
+def diasatras(data_inicio, data_fim=None):
+    data_inicio = datetime.datetime.fromtimestamp(float(data_inicio))
+    if (data_fim):
+        data_fim = datetime.datetime.fromtimestamp(float(data_fim))
+    else:
+        data_fim = datetime.datetime.today()
+    return (data_fim - data_inicio).days
