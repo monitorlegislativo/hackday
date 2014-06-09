@@ -3,6 +3,9 @@ body {
 	font-family: Roboto, Verdana;
 }
 
+a:hover {
+	text-decoration: none;
+}
 
 /* Frontpage - front.html */
 
@@ -14,12 +17,20 @@ body {
 	width:368px;
 	height:283px;
 	background-image: url('/static/imgs/logo.png');
-	margin-top:75px;
+	margin-top:70px;
 	margin-left:100px;
+	margin-bottom: 32px;
 }
 
 #frontpage .busca {
+	margin-top:18px;
+	margin-bottom:28px;
 	width:80%;
+	height:50px;
+	border:5px solid #FFF;
+	background-color: #afafaf;
+	color:#FFF;
+	font-size: 20pt;
 }
 
 
@@ -64,7 +75,7 @@ body {
 }
 
 #legis .tempo span {
-	float:right;
+	float:rightt s;
 }
 #legis .status.card {
 	background-color: #c03226;
