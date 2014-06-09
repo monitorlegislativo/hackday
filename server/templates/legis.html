@@ -51,7 +51,9 @@
 							{% if p.encerramento %}
 							{{p.encerramento}}
 							{% else %}
-							{p.tramitacoes|reverse|first.tramitacao}
+							{% for last in p.tramitacoes[-1:] %}
+								{{last.tramitacao}}
+							{% endfor %}
 							{% endif %}
 						</div>
 					</div>
