@@ -132,6 +132,7 @@ class PL(object):
         __, __, __, autor = dados.split('#')
         self.autores.append(autor.strip())
 
+<<<<<<< HEAD
     def dados_relatores(self,dados):
         '''Agrega os dados dos relatores'''
         try:
@@ -146,6 +147,8 @@ class PL(object):
             
         except KeyError:
             print('Erro in dados_relatores! ', dados)
+=======
+>>>>>>> 1e57b38431e2292c53842ae9f9594fcddecd1ab1
 
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:

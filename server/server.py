@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
-from tools import jsonify, diasatras
+from tools import jsonify, diasatras, futuro
 from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
@@ -32,6 +32,29 @@ def projeto(tipo, numero, ano, json=False):
 	pid = tipo.lower() + '-' + numero + '-' + ano
 	projeto = mongo.db.legis.find_one({"_id": pid})
 	explicacoes = mongo.db.explicacoes.find()
+	
+	# Monta tramitacao
+	for p in projeto['tramitacoes']:
+		p['tipo'] = 'tramita'
+
+	if projeto.has_key('encerramento'):
+		projeto['tramitacoes'].append({
+				'data_inicio' : projeto['data_encerramento'], #pensar
+				'tramitacao' : projeto['encerramento'],
+				'tipo' : 'encerramento'
+			})
+		for p in projeto['tramitacoes']:
+			if p['data_inicio'] > projeto['data_encerramento'] and p['tipo'] == 'tramita':
+				p['tipo'] = 'arquivo'
+	
+	for c in projeto['comissoes']:
+		if not any(p['tramitacao'] == c for p in projeto['tramitacoes']) and not projeto.has_key('encerramento'): #adicionar tramitacao conjunta
+			projeto['tramitacoes'].append({
+				'tipo' : 'comdes',
+				'tramitacao' : c,
+				'data_inicio' : futuro()
+				})
+
 	if not projeto:
 		abort(404)
 	if json == 'json':
