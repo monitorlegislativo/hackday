@@ -95,7 +95,20 @@ h2 {
 }
 #legis .tramitacao .card {
 	float:left;
+}
+
+#legis .tramita {
 	background-color: #e6e6e6;
+}
+
+#legis .arquivo {
+	background-color: #e6e6e6;
+	opacity:0.5;
+}
+
+#legis .encerramento {
+	background-color: #c03226;
+	color:#000;
 }
 
 #legis .explicacao {

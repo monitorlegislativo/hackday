@@ -84,8 +84,8 @@
 					<div class="col-md-6">
 						<div class="tramitacao">
 							<h2>Tramitação</h2>
-							{% for tramite in p.tramitacoes %}
-								<a href="#T-{{tramite.tramitacao}}" data-tramitacao={{tramite.tramitacao}}><div class="card {{tramite.tramitacao}}">
+							{% for tramite in p.tramitacoes|sort(attribute='data_inicio') %}
+								<a href="#T-{{tramite.tramitacao}}" data-tramitacao={{tramite.tramitacao}}><div class="card {{tramite.tramitacao}} {{tramite.tipo}}">
 									{{tramite.tramitacao}}<br/>
 									{% if tramite.data_fim %}
 									{{tramite.data_inicio|diasatras(tramite.data_fim)}} dias

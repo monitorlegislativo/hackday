@@ -119,7 +119,6 @@ class PL(object):
         self.autores.append(autor.strip())
 
 
-
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
         json.dump(

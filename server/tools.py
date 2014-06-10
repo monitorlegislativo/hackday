@@ -5,7 +5,7 @@ except ImportError:
         import json
     except ImportError:
         raise ImportError
-import datetime
+import datetime, time
 from bson.objectid import ObjectId
 from werkzeug import Response
  
@@ -29,3 +29,6 @@ def diasatras(data_inicio, data_fim=None):
     else:
         data_fim = datetime.datetime.today()
     return (data_fim - data_inicio).days
+
+def futuro():
+    return time.mktime((datetime.datetime.now()+datetime.timedelta(1)).timetuple())
