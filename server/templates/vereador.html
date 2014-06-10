@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}<title>{{v.nome}} - Monitor Legislativo</title>{% endblock %}
+{% block body %}
+<div class="navbar" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Projetos de lei</a></li>
+            <li><a href="#about">Vereadores</a></li>
+            <li><a href="#contact">Temas</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+        	<li><a href="{{url_for('index')}}"><img src="/static/imgs/logo-small.png"></a></li>
+      	  </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container" id="vereador">
+		<div class="row">
+  			<div class="col-md-2 sidebar-left">
+  				<div class="picture">
+  					<img src="#" />
+  				</div>
+
+  				<div class="info">
+	  				<div>
+	  					<b>Nome</b>
+	  					{{v.nome}}
+	  				</div>
+	  				<div>
+	  				<b>Partido</b>
+  						{% set atual = v.vereancas|first %}
+  						{{ atual.partido }}
+  					</div>
+   					<div>
+  						<b>Contato</b>
+					</div>
+					<div class="assuntos">
+						<ul>
+						{% for assunto in v.assuntos[0:9] %}
+							<li>{{assunto}}</li>
+						{% endfor %}
+						</ul>
+					</div>
+  				</div>
+  			</div>
+  			<div class="col-md-1 badges">
+  				{% for m in v.mesas %}
+  					{{m.cargo}}
+  				{% endfor %}
+  			</div>
+  			<div class="col-md-9 main">
+  				<div class="comissoes">
+  					<div class="atual row">
+	  					<div class="col-md-4">
+	  						<h2>Comissão Atual</h2>
+	  					</div>
+	  					<div class="col-md-5">
+	  						<b>{{v.comissoes[0].nome}}</b>
+	  						<p>{{v.comissoes[0].explicacao}}</p>
+	  						<div class="badge">{{v.comissoes[0].cargo}}</div>
+	  					</div>
+  					</div>
+  					<div class="passadas">
+	  					<div class="comissao row">
+	  					<div class="col-md-4">
+	  						<h2>Comissões Anteriores</h2>
+	  					</div>
+	  					<div class="col-md-5">
+	  						<b>{{v.comissoes[1].nome}}</b>
+	  						<p>{{v.comissoes[1].explicacao}}</p>
+	  						<div class="badge">{{v.comissoes[1].cargo}}</div>
+	  					</div>
+	  					</div>
+	  					
+	  					{% for c in v.comissoes[2:] %}
+	  					<div class="comissao row">
+	  					<div class="col-md-5 col-md-offset-4">
+	  						<b>{{c.nome}}</b>
+	  						<p>{{c.explicacao}}</p>
+	  						<div class="badge">{{c.cargo}}</div>
+	  					</div>
+	  					</div>
+	  					{% endfor %}
+  					</div>
+  				</div>
+  				<div class="projetos">
+  				<h2>Ultimos projetos de lei alterados</h2>
+  				</div>
+  			</div>
+  		</div>
+
+    </div>
+  
+
+{% endblock %}

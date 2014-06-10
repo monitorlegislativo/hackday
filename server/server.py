@@ -25,16 +25,31 @@ def busca():
 	except:
 		return termo #todo
 
+@app.route('/vereador/<nome>')
+@app.route('/vereador/<nome>/<json>')
+def _vereador(nome, json=False):
+	vereador = mongo.db.vereadores.find_one({"nome" : nome})
+	vereador['assuntos'] = []
+	if not (vereador):
+		abort(404)
+	if not json:
+		return render_template('vereador.html', v=vereador)
+	elif json == 'json':
+		return jsonify(v)
+
+
 
 @app.route('/legis/<tipo>/<numero>/<ano>')
 @app.route('/legis/<tipo>/<numero>/<ano>/<json>')
-def projeto(tipo, numero, ano, json=False):
+def _projeto(tipo, numero, ano, json=False):
 	pid = tipo.lower() + '-' + numero + '-' + ano
 	projeto = mongo.db.legis.find_one({"_id": pid})
 	explicacoes = mongo.db.explicacoes.find()
 	
 	# Monta tramitacao
 	for p in projeto['tramitacoes']:
+		if p['data_inicio'] == '':
+			p['data_inicio'] = futuro()
 		p['tipo'] = 'tramita'
 
 	if projeto.has_key('encerramento'):

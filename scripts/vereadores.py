@@ -30,6 +30,7 @@ def data_ano(data):
 class Vereador(object):
     def __init__(self, registro, nome, nomes_parlamentares, outros_nomes,
                  liderancas, mesas, eleicoes, vereancas, comissoes):
+        self._id = registro.strip()
         self.registro = registro.strip()
         self.nome = nome.strip()
 
@@ -101,12 +102,24 @@ class Vereador(object):
         return self.pega_dados(dados, campos, ['inicio', 'fim'])
 
 
+def mongo_save(vereadores, clear=False):
+    from pymongo import MongoClient
+    client = MongoClient()
+    db = client.monitorlegislativo
+    collection = db.vereadores
+    if (clear):
+        collection.drop()
+    for v in vereadores:
+        collection.update({'_id' : v._id}, v.__dict__, upsert=True)
+
+def local_save(vereadores):
+    with open('vereadores.json', 'w') as out:
+        json.dump({v.registro: v.__dict__ for v in vereadores}, out, indent=4)
+
 if '__main__' == __name__:
-    with io.open('../raw/vereador.txt', 'r',
+    with io.open('../raw/vereador/vereador.txt', 'r',
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         vereadores = [Vereador(*dados.split('#'))
                       for dados in arquivo_raw.readlines()
                       if len(dados.split('#')) == 9]
-
-    with open('vereadores.json', 'w') as out:
-        json.dump({v.registro: v.__dict__ for v in vereadores}, out, indent=4)
+    mongo_save(vereadores)
