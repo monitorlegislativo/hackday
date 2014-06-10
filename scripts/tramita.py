@@ -36,15 +36,28 @@ def identificador(dados):
     return "{tipo}-{numero}-{data}".format(tipo=tipo, numero=numero, data=data)
 
 
+def identificador_relator(dados):
+	'''Gera identificador para os dados do arquivo de relatores'''
+	dados = dados.split(';')
+	tipo = dados[2].strip().lower()
+	numero = dados[3].strip().zfill(4)
+	data = dados[4].strip()
+	return "{tipo}-{numero}-{data}".format(tipo=tipo, numero=numero, data=data)
+
+
 def processa_arquivo(arquivo, callback):
+	
     with io.open(arquivo, 'r',
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         for dados in arquivo_raw.readlines()[2:]:
             if dados.strip():
                 try:
-                    getattr(projetos[identificador(dados)], callback)(dados)
+                	if arquivo.split('/').pop() == 'relatores.csv':
+                		getattr(projetos[identificador_relator(dados)], callback)(dados)
+                	else:
+                		getattr(projetos[identificador(dados)], callback)(dados)
                 except KeyError:
-                    print(dados)
+                    print('Erro!' ,dados)
 
 
 class PL(object):
@@ -65,6 +78,7 @@ class PL(object):
         self.error = False
         self.tramitacoes = []
         self.comissoes = []
+        self.relatores = []
         self.assuntos = []
         self.autores = [] # Talvez seja o caso de ja normalizar e achar um id unico aqui
 
@@ -118,7 +132,20 @@ class PL(object):
         __, __, __, autor = dados.split('#')
         self.autores.append(autor.strip())
 
-
+    def dados_relatores(self,dados):
+        '''Agrega os dados dos relatores'''
+        try:
+            linha = dados.split(';')
+            if len(linha) == 13:
+            	comissao = linha[5].strip().lower()
+            	vereador = linha[7].strip().lower()
+            	relator = {'comisso':comissao, 'vereador':vereador}
+            	self.relatores.append(relator)
+            else:
+            	print ('linha bizarrra (relatores.csv) = ', linha)
+            
+        except KeyError:
+            print('Erro in dados_relatores! ', dados)
 
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
@@ -157,8 +184,14 @@ if '__main__' == __name__:
     print('Processando comissões.')
     processa_arquivo(RAW+'comdes.txt', 'dados_comissoes')
 
+    print('Processando relatores.')
+    processa_arquivo(RAW+'relatores.csv', 'dados_relatores')
+
     print('Processando assuntos.')
     processa_arquivo(RAW+'assunto.txt', 'dados_assuntos')
 
     print('Processando autores.')
     processa_arquivo(RAW+'autor.txt', 'dados_autores')
+
+    mongo_save(projetos)
+    #local_save(projetos)

@@ -30,6 +30,8 @@ wget -N http://www2.camara.sp.gov.br/Dados_abertos/projetos/prolegs.txt
 wget -N http://www2.camara.sp.gov.br/Dados_abertos/projetos/prolegt.txt
 wget -N http://www2.camara.sp.gov.br/Dados_abertos/projetos/prolegp.txt
 wget -N http://www2.camara.sp.gov.br/Dados_abertos/projetos/projetos.txt
+wget -N http://www2.camara.sp.gov.br/Dados_abertos/projetos/relatores.csv
+
 cd ..
 
 # Vereadores
