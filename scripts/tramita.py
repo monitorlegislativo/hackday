@@ -12,6 +12,7 @@ from __future__ import print_function
 import io
 import json
 import time
+import re
 from datetime import datetime
 
 RAW = '../raw/legis/'
@@ -37,27 +38,27 @@ def identificador(dados):
 
 
 def identificador_relator(dados):
-	'''Gera identificador para os dados do arquivo de relatores'''
-	dados = dados.split(';')
-	tipo = dados[2].strip().lower()
-	numero = dados[3].strip().zfill(4)
-	data = dados[4].strip()
-	return "{tipo}-{numero}-{data}".format(tipo=tipo, numero=numero, data=data)
+    '''Gera identificador para os dados do arquivo de relatores'''
+    dados = dados.split(';')
+    tipo = dados[2].strip().lower()
+    numero = dados[3].strip().zfill(4)
+    data = dados[4].strip()
+    return "{tipo}-{numero}-{data}".format(tipo=tipo, numero=numero, data=data)
 
 
 def processa_arquivo(arquivo, callback):
-	
+    
     with io.open(arquivo, 'r',
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         for dados in arquivo_raw.readlines()[2:]:
             if dados.strip():
                 try:
-                	if arquivo.split('/').pop() == 'relatores.csv':
-                		getattr(projetos[identificador_relator(dados)], callback)(dados)
-                	else:
-                		getattr(projetos[identificador(dados)], callback)(dados)
+                    if arquivo.split('/').pop() == 'relatores.csv':
+                        getattr(projetos[identificador_relator(dados)], callback)(dados)
+                    else:
+                        getattr(projetos[identificador(dados)], callback)(dados)
                 except KeyError:
-                    print('Erro!' ,dados)
+                    print('Erro in processa_arquivo!' ,dados)
 
 
 class PL(object):
@@ -79,6 +80,8 @@ class PL(object):
         self.tramitacoes = []
         self.comissoes = []
         self.relatores = []
+        self.pareceres = []
+        self.deliberacoes = []
         self.assuntos = []
         self.autores = [] # Talvez seja o caso de ja normalizar e achar um id unico aqui
 
@@ -132,23 +135,73 @@ class PL(object):
         __, __, __, autor = dados.split('#')
         self.autores.append(autor.strip())
 
-<<<<<<< HEAD
     def dados_relatores(self,dados):
         '''Agrega os dados dos relatores'''
         try:
             linha = dados.split(';')
             if len(linha) == 13:
-            	comissao = linha[5].strip().lower()
-            	vereador = linha[7].strip().lower()
-            	relator = {'comisso':comissao, 'vereador':vereador}
-            	self.relatores.append(relator)
+                comissao = linha[5].strip().lower()
+                vereador = linha[7].strip().lower()
+                relator = {'comisso':comissao, 'vereador':vereador}
+                self.relatores.append(relator)
             else:
-            	print ('linha bizarrra (relatores.csv) = ', linha)
+                print ('linha bizarrra (relatores.csv) = ', linha)
             
         except KeyError:
             print('Erro in dados_relatores! ', dados)
-=======
->>>>>>> 1e57b38431e2292c53842ae9f9594fcddecd1ab1
+
+    def dados_pareceres(self, dados):
+        '''Agrega os dados dos pareceres'''
+        try:
+            linha = dados.split('#')
+            arquivo = linha[3].strip().upper()
+            linha = arquivo.split('-')
+
+            p = re.compile('(JUST|URB|FIN|EDUC|ECON|SAUDE|ADM|CONJ|CULT|ABAST|SERV|TRANS)([A-Z]*)([0-9]*)')
+            m = p.match(linha[0])
+            comissao = m.group(1)
+            complemento = m.group(2)
+            numero = m.group(3)
+
+            # Alguns projetos possuem mais de uma versão do parecer na mesma Comissão. Ex: CONJPL0127-1992-2
+            if len(linha) == 2:
+                ano = linha[1].replace('.PDF','')
+                versao = '1'
+            if len(linha) == 3:
+                ano = linha[1]
+                versao = linha[2].replace('.PDF','')
+
+            parecer = {'arquivo': arquivo, 'comissao': comissao, 'complemento': complemento, 'numero': numero, 'ano': ano, 'versao': versao}
+
+            self.pareceres.append(parecer)
+
+        except:
+            print('Erro in dados_pareceres! ', dados)
+
+
+    def dados_deliberacoes(self, dados):
+        '''Agrega os dados das deliberacoes'''
+        try:
+            __, __, __, linha = dados.split('#')
+
+            dados = linha.split('-')
+
+            delibera = dados[0].strip()
+            tam = len(dados)
+
+            linha = dados[tam-1].strip()
+            tam2 = len(linha)
+
+            data = linha[tam2-11:].replace('.','')
+
+            deliberacao = {'delibera':delibera, 'data': data_br(data)}
+
+            self.deliberacoes.append(deliberacao)
+
+        except:
+            print('Erro in dados_deliberacoes! ', dados)
+
+
 
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
@@ -190,11 +243,17 @@ if '__main__' == __name__:
     print('Processando relatores.')
     processa_arquivo(RAW+'relatores.csv', 'dados_relatores')
 
+    print('Processando pareceres.')
+    processa_arquivo(RAW+'prolegpa.txt', 'dados_pareceres')
+
+    print('Processando deliberações.')
+    processa_arquivo(RAW+'delibera.txt', 'dados_deliberacoes')
+
     print('Processando assuntos.')
     processa_arquivo(RAW+'assunto.txt', 'dados_assuntos')
 
     print('Processando autores.')
     processa_arquivo(RAW+'autor.txt', 'dados_autores')
 
-    mongo_save(projetos)
-    #local_save(projetos)
+    #mongo_save(projetos)
+    local_save(projetos)

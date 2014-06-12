@@ -37,6 +37,9 @@ cd ..
 # Vereadores
 cd vereador
 wget -N http://www2.camara.sp.gov.br/Dados_abertos/vereador/vereador.txt
+
+# Ocupação dos Gabinetes pelos Vereadores
+wget -N http://www2.camara.sp.gov.br/Dados_abertos/vereador/SSP_HISTORICO_VEREADORES.csv
 cd ..
 
 #Updated
