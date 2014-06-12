@@ -17,6 +17,7 @@ from datetime import datetime
 
 RAW = '../raw/legis/'
 FINAL = '../data/'
+ERRORS = set()
 
 def data_br(data):
     '''Intepreta datas no formato brasileiro DD/MM/YYYY'''
@@ -52,14 +53,16 @@ def processa_arquivo(arquivo, callback):
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         for dados in arquivo_raw.readlines()[2:]:
             if dados.strip():
-                try:
-                    if arquivo.split('/').pop() == 'relatores.csv':
-                        getattr(projetos[identificador_relator(dados)], callback)(dados)
-                    else:
-                        getattr(projetos[identificador(dados)], callback)(dados)
-                except KeyError:
-                    print('Erro in processa_arquivo!' ,dados)
-
+                if arquivo.split('/').pop() == 'relatores.csv':
+                    _id = identificador_relator(dados)
+                else:
+                    _id = identificador(dados)
+                ano = _id.split('-')[1]
+                if projetos.has_key(_id):
+                    getattr(projetos[_id], callback)(dados)
+                else:
+                    print(_id)
+                    ERRORS.add(_id)
 
 class PL(object):
     '''Projeto de Lei da Camara Municipal de São Paulo'''
@@ -142,9 +145,9 @@ class PL(object):
         try:
             linha = dados.split(';')
             if len(linha) == 13:
-                comissao = linha[5].strip().lower()
-                vereador = linha[7].strip().lower()
-                relator = {'comisso':comissao, 'vereador':vereador}
+                comissao = linha[5].strip().upper()
+                vereador = linha[7].strip().title()
+                relator = {'comissao':comissao, 'vereador':vereador}
                 self.relatores.append(relator)
             else:
                 print ('linha bizarrra (relatores.csv) = ', linha)
