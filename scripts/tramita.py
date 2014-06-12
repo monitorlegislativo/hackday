@@ -84,6 +84,8 @@ class PL(object):
         self.deliberacoes = []
         self.assuntos = []
         self.autores = [] # Talvez seja o caso de ja normalizar e achar um id unico aqui
+        self.encaminhamentos = []
+        self.substitutivos = []
 
         try:
             data = datetime.fromtimestamp(
@@ -152,9 +154,12 @@ class PL(object):
 
     def dados_pareceres(self, dados):
         '''Agrega os dados dos pareceres'''
+
         try:
             linha = dados.split('#')
-            arquivo = linha[3].strip().upper()
+            arquivo = linha[3].strip().upper().replace('PDF', 'pdf')
+            url = "http://camaramunicipalsp.qaplaweb.com.br/iah/fulltext/parecer/" + arquivo
+
             linha = arquivo.split('-')
 
             p = re.compile('(JUST|URB|FIN|EDUC|ECON|SAUDE|ADM|CONJ|CULT|ABAST|SERV|TRANS)([A-Z]*)([0-9]*)')
@@ -171,7 +176,7 @@ class PL(object):
                 ano = linha[1]
                 versao = linha[2].replace('.PDF','')
 
-            parecer = {'arquivo': arquivo, 'comissao': comissao, 'complemento': complemento, 'numero': numero, 'ano': ano, 'versao': versao}
+            parecer = {'url': url, 'arquivo': arquivo, 'comissao': comissao, 'complemento': complemento, 'numero': numero, 'ano': ano, 'versao': versao}
 
             self.pareceres.append(parecer)
 
@@ -201,6 +206,27 @@ class PL(object):
         except:
             print('Erro in dados_deliberacoes! ', dados)
 
+    def dados_encaminhamentos(self,dados):
+        '''Agrega os dados dos encaminhamentos'''
+        try:
+            __, __, __, encaminhamento = dados.split('#')
+            self.encaminhamentos.append(encaminhamento)
+
+        except:
+            print('Erro in dados_encaminhamentos! ', dados)
+
+    def dados_substitutivos(self,dados):
+        '''Agrega os dados dos substitutivos/emendas'''
+        try:
+            __, __, __, arquivo = dados.split('#')
+
+            url = "http://camaramunicipalsp.qaplaweb.com.br/iah/fulltext/substitutivo/" + arquivo.upper().replace('PDF','pdf')
+
+            substitutivo = {'arquivo': arquivo, 'url': url}
+            self.substitutivos.append(substitutivo)
+
+        except:
+            print('Erro in dados_substitutivos! ', dados)
 
 
 def local_save(projetos):
@@ -255,6 +281,12 @@ if '__main__' == __name__:
 
     print('Processando autores.')
     processa_arquivo(RAW+'autor.txt', 'dados_autores')
+
+    print('Processando encaminhamentos.')
+    processa_arquivo(RAW+'encami.txt', 'dados_encaminhamentos')
+
+    print('Processando substitutivos.')
+    processa_arquivo(RAW+'prolegs.txt', 'dados_substitutivos')
 
     #mongo_save(projetos)
     local_save(projetos)
