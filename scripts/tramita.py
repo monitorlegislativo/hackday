@@ -154,35 +154,42 @@ class PL(object):
 
     def dados_pareceres(self, dados):
         '''Agrega os dados dos pareceres'''
+        linha = dados.strip().split('#')
+        _id = linha[3][:-4].upper().strip()
+        if not _id:
+            return None
 
-        try:
-            linha = dados.split('#')
-            arquivo = linha[3].strip().upper().replace('PDF', 'pdf')
-            url = "http://camaramunicipalsp.qaplaweb.com.br/iah/fulltext/parecer/" + arquivo
+        url = "http://camaramunicipalsp.qaplaweb.com.br/iah/fulltext/parecer/" + _id + '.pdf'
+        
 
-            linha = arquivo.split('-')
+        pattern = r'''
+        (JUST|URB|FIN|EDUC|ECON|SAUDE|ADM|CONJ|CULT|ABAST|SERV|TRANS)? #comissoes
+        ([A-Z]*) #complemento - se comissoes for vazio / comissao antiga ou nao cadastrada
+        ([0-9]*) #numero do parecer
+        - #separador
+        ([0-9]*) #ano
+        ([A-Z]*) #status - aprovado (só usado em alguns pareceres)
+        (-)? #separador no caso de mais versões
+        ([0-9]*) #numero da versão
+        '''
+        p = re.compile(pattern, re.VERBOSE)
+        m = p.match(_id)
+        if not m:
+            return None #pula parecer zoado
+        comissao = m.group(1)
+        complemento = m.group(2)
+        if not m.group(1):
+            comissao = m.group(2)
+            complemento = ''
+        numero = m.group(3)
+        # Alguns projetos possuem mais de uma versão do parecer na mesma Comissão. Ex: CONJPL0127-1992-2
+        ano = m.group(4)
+        status = m.group(5)
+        versao = m.group(7)
+        
+        parecer = {'url': url, '_id': _id, 'comissao': comissao, 'complemento': complemento, 'numero': numero, 'ano': ano, 'versao': versao}
 
-            p = re.compile('(JUST|URB|FIN|EDUC|ECON|SAUDE|ADM|CONJ|CULT|ABAST|SERV|TRANS)([A-Z]*)([0-9]*)')
-            m = p.match(linha[0])
-            comissao = m.group(1)
-            complemento = m.group(2)
-            numero = m.group(3)
-
-            # Alguns projetos possuem mais de uma versão do parecer na mesma Comissão. Ex: CONJPL0127-1992-2
-            if len(linha) == 2:
-                ano = linha[1].replace('.PDF','')
-                versao = '1'
-            if len(linha) == 3:
-                ano = linha[1]
-                versao = linha[2].replace('.PDF','')
-
-            parecer = {'url': url, 'arquivo': arquivo, 'comissao': comissao, 'complemento': complemento, 'numero': numero, 'ano': ano, 'versao': versao}
-
-            self.pareceres.append(parecer)
-
-        except:
-            print('Erro in dados_pareceres! ', dados)
-
+        self.pareceres.append(parecer)
 
     def dados_deliberacoes(self, dados):
         '''Agrega os dados das deliberacoes'''
