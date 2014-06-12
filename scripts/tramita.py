@@ -209,6 +209,7 @@ def local_save(projetos):
             [projeto.__dict__ for projeto in projetos.values()],
             output, indent=4)
 
+
 def mongo_save(projetos, clear=False):
     from pymongo import MongoClient
     client = MongoClient()
