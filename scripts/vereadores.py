@@ -102,7 +102,7 @@ class Vereador(object):
 
 
 if '__main__' == __name__:
-    with io.open('../raw/vereador.txt', 'r',
+    with io.open('../raw/vereador/vereador.txt', 'r',
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         vereadores = [Vereador(*dados.split('#'))
                       for dados in arquivo_raw.readlines()
