@@ -89,6 +89,7 @@ class PL(object):
         self.autores = [] # Talvez seja o caso de ja normalizar e achar um id unico aqui
         self.encaminhamentos = []
         self.substitutivos = []
+        self.msgadits = []
 
         try:
             data = datetime.fromtimestamp(
@@ -178,6 +179,7 @@ class PL(object):
         p = re.compile(pattern, re.VERBOSE)
         m = p.match(_id)
         if not m:
+            print(_id)
             return None #pula parecer zoado
         comissao = m.group(1)
         complemento = m.group(2)
@@ -239,6 +241,20 @@ class PL(object):
             print('Erro in dados_substitutivos! ', dados)
 
 
+    def dados_msgadit(self,dados):
+        '''Agrega os dados dos substitutivos/emendas'''
+        try:
+            __, __, __, arquivo = dados.split('#')
+
+            url = "http://camaramunicipalsp.qaplaweb.com.br/iah/fulltext/mensagem/" + arquivo.upper().replace('PDF','pdf')
+
+            msgadit = {'arquivo': arquivo, 'url': url}
+            self.msgadits.append(msgadit)
+
+        except:
+            print('Erro in dados_msgadit! ', dados)
+
+
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
         json.dump(
@@ -258,8 +274,7 @@ def mongo_save(projetos, clear=False):
 
 if '__main__' == __name__:
     print('Processando projetos.')
-    with io.open(RAW+'projetos.txt', 'r',
-                 encoding='iso-8859-1', newline='\r\n') as projetos_raw:
+    with io.open(RAW+'projetos.txt', 'r', encoding='iso-8859-1', newline='\r\n') as projetos_raw:
         projetos = {pl._id: pl for pl in
                     (PL(dados) for dados in projetos_raw.readlines()[2:]
                      if dados.strip())
@@ -297,6 +312,9 @@ if '__main__' == __name__:
 
     print('Processando substitutivos.')
     processa_arquivo(RAW+'prolegs.txt', 'dados_substitutivos')
+
+    print('Processando mensagem adit.')
+    processa_arquivo(RAW+'prolegm.txt', 'dados_msgadit')
 
     #mongo_save(projetos)
     local_save(projetos)
