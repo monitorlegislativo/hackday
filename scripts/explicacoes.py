@@ -1,18 +1,17 @@
-import codecs
+import codecs, csvkit
 
 DATA = '../data/'
-arquivo = codecs.open(DATA+'explicacoes.csv', encoding='utf-8')
-
-explicacoes = []
-for linha in arquivo.readlines()[1:]:
-	linha = linha.split(',')
-	explicacao = {
-		'_id' : linha[0],
-		'sigla' : linha[0],
-		'nome' : linha[1],
-		'descricao' : linha[2].strip()
-	}
-	explicacoes.append(explicacao)
+with open(DATA+'explicacoes.csv', 'rb') as csvfile:
+	arquivo = csvkit.reader(csvfile, delimiter=',', encoding='utf-8')
+	explicacoes = []
+	for linha in arquivo:
+		explicacao = {
+			'_id' : linha[0],
+			'sigla' : linha[0],
+			'nome' : linha[1],
+			'descricao' : linha[2].strip()
+		}
+		explicacoes.append(explicacao)
 
 def mongo_save(explicacoes, clear=False):
     from pymongo import MongoClient
