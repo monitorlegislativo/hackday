@@ -27,6 +27,9 @@
     <div class="container" id="busca">
 		<div class="row">
   			<div class="col-md-3 sidebar-left">
+          <h1>Busca</h1>
+          <h2>{{termo}} ({{misc.size}} resultados)</h2> 
+          Exibindo de {{misc.pagina*misc.perpagina}} até {{misc.pagina*misc.perpagina+misc.perpagina}}
   			</div>
   			<div class="col-md-9 main">
   				<div class="resultados">
@@ -51,7 +54,16 @@
               </div>
             {% endfor %}
   			</div>
-  		</div>
+        <div class="paginador">
+          {% if misc.pagina > 0 %}
+            <a href="{{url_for('busca', termo=termo, pagina=misc.pagina-1)}}">anterior</a>
+          {% endif %}
+          {% if misc.perpagina*misc.pagina+misc.perpagina < misc.size %}       
+            <a href="{{url_for('busca', termo=termo, pagina=misc.pagina+1)}}">próxima</a>
+          {% endif %}
+        </div>
+        
+      </div>
 
     </div>
   

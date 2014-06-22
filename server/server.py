@@ -14,9 +14,10 @@ mongo = PyMongo(app)
 def index():
 	return render_template('front.html')
 
-@app.route("/busca")
-def busca():
-	termo = request.args.get('termo', '')
+@app.route("/busca/<termo>")
+@app.route("/busca/<termo>/<int:pagina>")
+def busca(termo, pagina=0):
+	perpage = 15
 	try:
 		t = termo.split()
 		tipo = 'pl'
@@ -32,7 +33,10 @@ def busca():
 		query = { "$text" : { "$search" : termo }}
 				
 		projetos = mongo.db.legis.find(query)
-		return render_template("busca.html", projetos=projetos, termo=termo) #todo
+		misc = { "size" : projetos.count(),
+				 "perpagina" : perpage,
+				 "pagina" : pagina }
+		return render_template("busca.html", projetos=projetos.skip(pagina*perpage).limit(perpage), misc=misc, termo=termo) #todo
 
 @app.route('/vereador/<nome>')
 @app.route('/vereador/<nome>/<json>')
