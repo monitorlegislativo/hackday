@@ -19,19 +19,29 @@ def busca():
 	termo = request.args.get('termo', '')
 	try:
 		t = termo.split()
+		tipo = 'pl'
 		numero = str(int(t[0].strip())).zfill(4) #transforma em int e depois em str de novo com 4 casas
 		ano = str(int(t[1].strip()))
-		return redirect(url_for("projeto", tipo='pl',numero=numero, ano=ano))
+		pid = tipo.lower() + '-' + numero + '-' + ano
+		projeto = mongo.db.legis.find_one({"_id": pid})
+		if projeto:
+			return redirect(url_for("projeto", tipo='pl',numero=numero, ano=ano))
+		else:
+			abort(404)
 	except:
-		return termo #todo
+		query = { "$text" : { "$search" : termo }}
+				
+		projetos = mongo.db.legis.find(query)
+		return render_template("busca.html", projetos=projetos, termo=termo) #todo
 
 @app.route('/vereador/<nome>')
 @app.route('/vereador/<nome>/<json>')
 def _vereador(nome, json=False):
-	vereador = mongo.db.vereadores.find_one({"nome" : nome})
-	vereador['assuntos'] = []
+	vereador = mongo.db.vereadores.find_one({"nomes_parlamentares" : nome})
 	if not (vereador):
 		abort(404)
+	
+	vereador['assuntos'] = []
 	if not json:
 		return render_template('vereador.html', v=vereador)
 	elif json == 'json':
