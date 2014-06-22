@@ -34,9 +34,9 @@
       			<div class="autores">
       			<h2>Autores</h2>
       			<ul>
-      			<li class="principal">{{p.autores|first}}</li>
+      			<li class="principal"><a href="{{ url_for('_vereador', nome=p.autores|first|title) }}">{{p.autores|first}}</a></li>
       			{% for autor in p.autores[1:] %}
-      			<li>{{autor}}</li>
+      			<li><a href="{{ url_for('_vereador') }}">{{autor}}</a></li>
       			{% endfor %}
       			</ul>
       			</div>
