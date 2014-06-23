@@ -143,3 +143,15 @@ h2 {
 #legis .explicacao .explica:first-child {
 	display:block;
 }
+
+#legis .explica-ativa {
+	height:100% !important;
+}
+
+#footer {
+	text-align: center;
+}
+
+#footer p {
+	padding-top: 25px;
+}

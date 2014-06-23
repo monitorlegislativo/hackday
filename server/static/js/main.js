@@ -10,8 +10,8 @@ $().ready(function() {
     	e.preventDefault();
 
     	var t = $(this).data("tramitacao");
-    	$(".explica").hide('slow');
-    	$("#T-"+t).show('slow');
+    	$(".explica").hide('slow').removeClass("explica-ativa");
+    	$("#T-"+t).show('slow').addClass("explica-ativa");
         //Do stuff when clicked
     });
 });

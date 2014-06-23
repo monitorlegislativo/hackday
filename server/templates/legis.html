@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block title %}<title>{{p.tipo|upper}} {{p.numero}}/{{p.ano}} - Monitor Legislativo</title>{% endblock %}
 {% block body %}
-
     <div class="container" id="legis">
       	<div class="row">
       		<div class="col-md-2 sidebar-left">
@@ -84,7 +83,7 @@
 						<p>A Equipe de Controle do Processo Legislativo é parte integrante das Secretarias de Apoio ao Legislativo e é aqui que se da o inicio no processo de tramitação de Projeto de Lei dentro da casa legislativa quando protocola, indexa e autua as proposituras, dando-lhes o devido encaminhamento . Após esta fase primordial onde um texto vira Projeto de Lei (PL),  deve acompanhar e registrar todas as etapas de andamento das proposituras, cuidando para que observem-se os prazos legais.</p>
 						</div>
             {% for e in explicacoes %}
-            <div class="explica" id="T-{{e.sigla}}">
+            <div class="explica" id="T-{{e.sigla}}" style="height:0px">
             <b>{{e.sigla}} - {{e.nome}}</b>
             <p>{{e.descricao}}</p>
             </div>
