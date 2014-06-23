@@ -10,4 +10,7 @@ Pré-requisitos:
 * Flask
 * PyMongo
 
-* MongoDB
+* MongoDB 2.6
+
+É possível usar versões anteriores colocando a flag abaixo no mongodb.conf
+	textSearchEnabled=true

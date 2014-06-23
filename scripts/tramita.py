@@ -263,10 +263,11 @@ def local_save(projetos):
 
 
 def mongo_save(projetos, clear=False):
-    from pymongo import MongoClient
+    from pymongo import MongoClient, TEXT
     client = MongoClient()
     db = client.monitorlegislativo
     legis = db.legis
+    legis.ensure_index([("ementa", TEXT)], default_language="portuguese") ###Cria indice de texto - eventualmente adicionar outros fields
     if (clear):
         legis.drop()
     for p in projetos:
@@ -316,5 +317,4 @@ if '__main__' == __name__:
     print('Processando mensagem adit.')
     processa_arquivo(RAW+'prolegm.txt', 'dados_msgadit')
 
-    #mongo_save(projetos)
-    local_save(projetos)
+    mongo_save(projetos, True)
