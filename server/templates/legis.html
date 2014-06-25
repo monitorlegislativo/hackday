@@ -17,8 +17,37 @@
       			{% endfor %}
       			</ul>
       			</div>
+      			{% if p.relatores %}
+      			<div class="relatores">
+      			<h2>Relatores</h2>
+      			<ul>
+      			{% for relator in p.relatores %}
+      			<li><a href="{{ url_for('_vereador', nome=relator.vereador|title) }}">{{relator.vereador}}</a> - {{relator.comissao}}</li>
+      			{% endfor %}
+      			</ul>
+      			</div>
+      			{% endif %}
       			<div class="anexos">
       			<h2>Anexos</h2>
+      			<ul>
+      				{% for par in p.pareceres %}
+      					<li>Parecer: <a href="{{par.url}}">{{par.comissao}} {{par.complemento}} {{par.versao}}</a></li>
+      				{% endfor %}
+      			</ul>
+      			<ul>
+      				{% for subs in p.substitutivos %}
+      				<li>Substitutivo: <a href="{{subs.url}}">{{subs.arquivo}}</a></li>
+      				{% endfor %}
+      			</ul>
+      			</div>
+      			<div class="delibera">
+      			<h2>Deliberações</h2>
+      			<ul>
+      			{% for d in p.deliberacoes %}
+      			<li>{{d.delibera}}</li>
+      			{% endfor %}
+      			</ul>
+
       			</div>
       			<div class="assuntos">
       			<h2>Assuntos</h2>
@@ -27,6 +56,7 @@
       			<li>{{assunto}}</li>
       			{% endfor %}
       			</ul>
+
       			</div>
       		</div>
       		<div class="col-md-10 main">
