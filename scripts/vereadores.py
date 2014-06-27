@@ -11,11 +11,9 @@ from __future__ import print_function
 
 import io
 import json
-import os
 import time
 from datetime import datetime
 from subfield import expand
-from config import RAW_PATH, DATA_PATH
 
 
 def data_br(data):
@@ -119,20 +117,9 @@ def local_save(vereadores):
         json.dump({v.registro: v.__dict__ for v in vereadores}, out, indent=4)
 
 if '__main__' == __name__:
-<<<<<<< Updated upstream
     with io.open('../raw/vereador/vereador.txt', 'r',
-=======
-    with io.open(os.path.join(RAW_PATH, 'vereadores', 'vereador.txt'), 'r',
->>>>>>> Stashed changes
                  encoding='iso-8859-1', newline='\r\n') as arquivo_raw:
         vereadores = [Vereador(*dados.split('#'))
                       for dados in arquivo_raw.readlines()
                       if len(dados.split('#')) == 9]
-<<<<<<< Updated upstream
     mongo_save(vereadores)
-=======
-
-    with open(os.path.join(DATA_PATH,
-                           'vereadores', 'vereadores.json'), 'w') as out:
-        json.dump({v.registro: v.__dict__ for v in vereadores}, out, indent=4)
->>>>>>> Stashed changes
