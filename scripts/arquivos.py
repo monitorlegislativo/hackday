@@ -1,8 +1,16 @@
 #!/usr/bin/env python2
 # coding: utf-8
 
+'''
+Baixa todos os arquivos de dados de tramitação de projetos da
+Câmara Municipal de São Paulo.
+'''
+
+import os
 from lxml.html import parse
 from urllib import urlretrieve
+from configura import RAW_PATH
+from util import mkdir_p
 
 if '__main__' == __name__:
 
@@ -15,4 +23,6 @@ if '__main__' == __name__:
         '//p[contains(., "de arquivos")]/following-sibling::p/a/@href')
 
     for arquivo in arquivos_de_dados:
-        urlretrieve(arquivo, arquivo.split('/').pop())
+        path = os.path.join(RAW_PATH, 'tramitacoes')
+        mkdir_p(path)
+        urlretrieve(arquivo, os.path.join(path, arquivo.split('/').pop()))

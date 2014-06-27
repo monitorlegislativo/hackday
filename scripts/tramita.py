@@ -15,9 +15,12 @@ import time
 import re
 from datetime import datetime
 
+<<<<<<< Updated upstream
 RAW = '../raw/legis/'
 FINAL = '../data/'
 ERRORS = set()
+=======
+>>>>>>> Stashed changes
 
 def data_br(data):
     '''Intepreta datas no formato brasileiro DD/MM/YYYY'''
@@ -115,7 +118,6 @@ class PL(object):
         nome, extensao = nome_de_arquivo.split('.')
         self.url_pdf = self.url_base + "{nome}.{ext}".format(
             nome=nome.upper(), ext=extensao)
-        self.url_pdf = self.url_pdf.strip()
 
     def dados_tramitacoes(self, dados):
         '''Agrega os dados das tramitações'''
@@ -255,6 +257,7 @@ class PL(object):
             print('Erro in dados_msgadit! ', dados)
 
 
+<<<<<<< Updated upstream
 def local_save(projetos):
     with open(FINAL+'legis.json', 'w') as output:
         json.dump(
@@ -277,17 +280,25 @@ if '__main__' == __name__:
     print('Processando projetos.')
     with io.open(RAW+'projetos.txt', 'r', encoding='iso-8859-1', newline='\r\n') as projetos_raw:
         projetos = {pl._id: pl for pl in
+=======
+if '__main__' == __name__:
+    print('Processando projetos.')
+    with io.open('../raw/projetos.txt', 'r',
+                 encoding='iso-8859-1', newline='\r\n') as projetos_raw:
+        projetos = {pl.id: pl for pl in
+>>>>>>> Stashed changes
                     (PL(dados) for dados in projetos_raw.readlines()[2:]
                      if dados.strip())
                     if pl._id is not None}
 
     print('Processando encerramentos.')
-    processa_arquivo(RAW+'encerra.txt', 'dados_encerramentos')
+    processa_arquivo('../raw/encerra.txt', 'dados_encerramentos')
 
     print('Processando arquivos brutos.')
-    processa_arquivo(RAW+'prolegt.txt', 'dados_arquivos_brutos')
+    processa_arquivo('../raw/prolegt.txt', 'dados_arquivos_brutos')
 
     print('Processando tramitações.')
+<<<<<<< Updated upstream
     processa_arquivo(RAW+'tramita.txt', 'dados_tramitacoes')
 
     print('Processando comissões.')
@@ -318,3 +329,11 @@ if '__main__' == __name__:
     processa_arquivo(RAW+'prolegm.txt', 'dados_msgadit')
 
     mongo_save(projetos, True)
+=======
+    processa_arquivo('../raw/tramita.txt', 'dados_tramitacoes')
+
+    with open('tramitacoes.json', 'w') as output:
+        json.dump(
+            {projeto.id: projeto.__dict__ for projeto in projetos.values()},
+            output, indent=4)
+>>>>>>> Stashed changes
