@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
 from tools import jsonify, diasatras, futuro
 from flask.ext.pymongo import PyMongo
+from settings import *
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'monitorlegislativo'
