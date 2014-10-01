@@ -4,7 +4,8 @@ from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'monitorlegislativo'
-#app.config["SECRET_KEY"] = "KeepThisS3cr3t"
+app.config['MONGO_USERNAME'] = SETTINGS['username']
+app.config['MONGO_PASSWORD'] = SETTINGS['password']
 app.jinja_env.filters['diasatras'] = diasatras
 
 mongo = PyMongo(app)
